@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
 
-def count_colonies_with_canny_edge_detection(image_path):
+def count_colonies_within_petri_dish(image_path):
+    # Constants
+    approximate_colony_radius_pixels = 15  # Adjusted approximate radius of a colony in pixels
+
     # Load the image
     image = cv2.imread(image_path)
 
@@ -17,37 +20,38 @@ def count_colonies_with_canny_edge_detection(image_path):
     # Find contours
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Assuming the largest contour is the Petri dish, sort contours by area
-    contours = sorted(contours, key=cv2.contourArea, reverse=True)
-    
     if not contours:
         return None, 0  # If no contours are found
 
-    # Assume the largest contour is the Petri dish and exclude it
+    # Sort contours by area and assume the largest one is the Petri dish
+    contours = sorted(contours, key=cv2.contourArea, reverse=True)
     petri_dish_contour = contours[0]
-    inner_contours = contours[1:]  # All other contours are potential colonies
+    (pd_x, pd_y), pd_radius = cv2.minEnclosingCircle(petri_dish_contour)
 
-    # Draw contours for visualization (optional)
-    cv2.drawContours(image, [petri_dish_contour], -1, (0, 255, 0), 2)
-    for contour in inner_contours:
-        cv2.drawContours(image, [contour], -1, (0, 0, 255), 1)
+    colony_count = 0
+    for contour in contours[1:]:  # Exclude the Petri dish contour
+        (x, y), radius = cv2.minEnclosingCircle(contour)
+        distance_from_center = np.sqrt((x - pd_x) ** 2 + (y - pd_y) ** 2)
+        
+        # Check if the colony is within the Petri dish and matches the expected size
+        if distance_from_center + radius <= pd_radius and radius <= approximate_colony_radius_pixels:
+            cv2.circle(image, (int(x), int(y)), int(radius), (0, 0, 255), 2)  # Draw the colony
+            colony_count += 1
 
-    # Count of the inner contours is the count of colonies
-    colony_count = len(inner_contours)
+    # Draw the Petri dish contour for visualization
+    cv2.drawContours(image, [petri_dish_contour], -1, (0, 255, 0), 3)
 
-    # Optionally add the colony count to the image
+    # Add the colony count to the image for visualization
     cv2.putText(image, f"Colony Count: {colony_count}", (10, 30),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
     return image, colony_count
 
 
-
-
 # The function is ready to be called with the path to your image file
 # Example usage:
 sample_file = "sample-images/input/sample_1.png"
-result_image, count = count_colonies_with_canny_edge_detection(sample_file)
+result_image, count = count_colonies_within_petri_dish(sample_file)
 cv2.imshow('Result Image', result_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
