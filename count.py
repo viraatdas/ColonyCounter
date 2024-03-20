@@ -4,7 +4,7 @@ import numpy as np
 def count_colonies_within_petri_dish(image_path):
     # Constants
     approximate_colony_radius_pixels = 15  # Adjusted approximate radius of a colony in pixels
-    edge_exclusion_margin = 20  # Margin from the edge of the Petri dish where colonies will not be counted
+    edge_exclusion_margin = 50  # Margin from the edge of the Petri dish where colonies will not be counted
 
     # Load the image
     image = cv2.imread(image_path)
