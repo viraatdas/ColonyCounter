@@ -1,2 +1,4 @@
 # ColonyCounter
-count bacterial colonies 
+Count bacterial colonies from petri dish images 
+
+
