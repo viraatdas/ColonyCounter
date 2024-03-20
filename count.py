@@ -16,7 +16,7 @@ def count_colonies_within_petri_dish(image_path):
     blurred = cv2.GaussianBlur(gray, (9, 9), 0)
 
     # Apply Canny edge detection
-    edges = cv2.Canny(blurred, 50, 100)
+    edges = cv2.Canny(blurred, 50, 60)
 
     # Find contours
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
