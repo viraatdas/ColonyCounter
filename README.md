@@ -1,9 +1,9 @@
 # Colony Counter
-Count bacterial colonies from petri dish images 
+Count colonies from petri dish images 
 
 ## Sample outputs
 
-### Bacterial Colony Counter Results
+### Colony Counter Results
 
 The following table shows the input bacterial colony images and their corresponding output images with the colony count and superimposed points:
 
@@ -48,6 +48,7 @@ PRs are always welcome for any improvement
 
 ## Citation
 If you use this Colony Counter in your research work or project and want to cite, you can use the following BibTex entry: 
+
 ```
 @misc{colony-counter,
 title={Colony Counter},
