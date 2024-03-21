@@ -28,9 +28,9 @@ To use the Colony Counter, first, make sure you have Python installed on your sy
    cd ColonyCounter/
    ```
 4. Run the colony counter script with the path to the input image as an argument:
-  ```bash
-  python count.py sample-images/input/sample_1.png
-  ```
+    ```bash
+    python count.py sample-images/input/sample_1.png
+    ```
 
 This will process the input image, count the colonies, and generate an output image displaying the detected colonies along with the colony count in a window.
 
