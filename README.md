@@ -5,7 +5,7 @@ Count colonies from petri dish images
 
 ### Colony Counter Results
 
-The following table shows the input bacterial colony images and their corresponding output images with the colony count and superimposed points:
+The following table shows the input colony images and their corresponding output images with the colony count and superimposed points:
 
 | Input Image | Output Image |
 |-------------|--------------|
@@ -34,7 +34,7 @@ To use the Colony Counter, first, make sure you have Python installed on your sy
   python count.py sample-images/input/sample_1.png
   ```
 
-This will process the input image, count the bacterial colonies, and generate an output image displaying the detected colonies along with the colony count in a window.
+This will process the input image, count the colonies, and generate an output image displaying the detected colonies along with the colony count in a window.
 
 ## Todo (convert these to GitHub issues)
 - [ ] Improve the algorithm to achieve higher accuracy
