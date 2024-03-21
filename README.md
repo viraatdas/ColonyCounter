@@ -13,8 +13,6 @@ The following table shows the input colony images and their corresponding output
 
 ## Usage
 
-## Usage
-
 To use the Colony Counter, first, make sure you have Python installed on your system. Then, follow these steps:
 
 1. Install the required dependencies using pip:
