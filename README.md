@@ -1,6 +1,8 @@
 # Colony Counter
 
-Count colonies from petri dish images using a python script
+Count colonies from petri dish images.
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ca54de96-4808-4b92-a98d-32b860f6bbfe/deploy-status)](https://app.netlify.com/sites/colonycounter/deploys)
 
 ## Sample outputs
 
