@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 const ImageUpload = () => {
   const [images, setImages] = useState([]);
+  const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
     if (event.target.files) {
@@ -26,7 +27,6 @@ const ImageUpload = () => {
       });
 
       if (response.ok) {
-        // Handle response here
         alert('Images submitted successfully!');
       } else {
         alert('Failed to submit images.');
@@ -37,15 +37,27 @@ const ImageUpload = () => {
     }
   };
 
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
-    <div>
-      <input type="file" multiple onChange={handleFileChange} accept="image/*" />
-      <div>
+    <div className="image-upload-container">
+      <input
+        type="file"
+        multiple
+        onChange={handleFileChange}
+        accept="image/*"
+        style={{ display: 'none' }}
+        ref={fileInputRef}
+      />
+      <button className="image-upload-btn" onClick={handleButtonClick}>Upload Images</button>
+      <div className="image-preview">
         {images.map((image, index) => (
-          <img key={index} src={image.url} alt={image.name} style={{ width: '100px', height: 'auto' }} />
+          <img key={index} src={image.url} alt={image.name} />
         ))}
       </div>
-      <button onClick={handleSubmit}>Count Colonies</button>
+      <button className="image-upload-btn" onClick={handleSubmit}>Count Colonies</button>
     </div>
   );
 };
