@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 
 # Set the path for the uploads
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = '/Users/viraatd/Documents/Personal/ColonyCounter/backend/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure the folder exists
@@ -30,8 +30,7 @@ def count_colonies():
 
         result_image, count = count_colonies_within_petri_dish(image_path)
         
-        # [You will need to decide how you want to send the result image and count back to the client]
-        # For example, you might save the result image and send the path:
+        print(count)
         result_path = os.path.join(app.config['UPLOAD_FOLDER'], 'result_' + filename)
         cv2.imwrite(result_path, result_image)
         

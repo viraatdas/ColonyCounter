@@ -53,12 +53,14 @@ def count_colonies_within_petri_dish(image_path):
     return image, colony_count
 
 
-parser = argparse.ArgumentParser(description='Count colonies in a Petri dish image')
-parser.add_argument('image_path', type=str, help='Path to the input image file')
-args = parser.parse_args()
 
-sample_file = args.image_path
-result_image, count = count_colonies_within_petri_dish(sample_file)
-cv2.imshow('Result Image', result_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Count colonies in a Petri dish image')
+    parser.add_argument('image_path', type=str, help='Path to the input image file')
+    args = parser.parse_args()
+
+    sample_file = args.image_path
+    result_image, count = count_colonies_within_petri_dish(sample_file)
+    cv2.imshow('Result Image', result_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
