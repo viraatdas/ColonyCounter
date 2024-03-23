@@ -11,11 +11,15 @@ app = Flask(__name__)
 CORS(app)
 
 # Set the path for the uploads
-UPLOAD_FOLDER = '/Users/viraatdas/Documents/GitHub/ColonyCounter/backend/uploads'
+UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure the folder exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+@app.route('/', methods=['GET'])
+def index():
+    return 'Welcome to the Colony Counter API!'
 
 @app.route('/count-colonies', methods=['POST'])
 def count_colonies():
@@ -45,4 +49,4 @@ def count_colonies():
         })
     
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
