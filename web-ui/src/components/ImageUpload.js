@@ -1,14 +1,20 @@
 import React, { useState, useRef } from 'react';
 
 const ImageUpload = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [resultImage, setResultImage] = useState('');
-  const [colonyCount, setColonyCount] = useState(null);
+  const [images, setImages] = useState([]); // Store the images for preview
+  const [selectedFile, setSelectedFile] = useState(null); // The file to be sent
+  const [resultImage, setResultImage] = useState(''); // The processed image
+  const [colonyCount, setColonyCount] = useState(null); // The colony count result
   const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setSelectedFile(event.target.files[0]);
+    if (event.target.files) {
+      const filesArray = Array.from(event.target.files).map((file) => ({
+        url: URL.createObjectURL(file),
+        name: file.name,
+      }));
+      setSelectedFile(event.target.files[0]); // Assuming you're processing the first selected file
+      setImages(filesArray);
     }
   };
 
@@ -25,9 +31,6 @@ const ImageUpload = () => {
       const response = await fetch('http://127.0.0.1:5000/count-colonies', {
         method: 'POST',
         body: formData,
-        headers: {
-          // Don't set Content-Type to multipart/form-data here, fetch will do it automatically
-        },
       });
 
       if (response.ok) {
@@ -36,8 +39,7 @@ const ImageUpload = () => {
         setColonyCount(data.colony_count);
         alert('Images submitted successfully!');
       } else {
-        const errorText = await response.text();
-        alert(`Failed to submit images. Server responded with status ${response.status}: ${errorText}`);
+        alert('Failed to submit images.');
       }
     } catch (error) {
       console.error('Submission error:', error);
@@ -53,17 +55,23 @@ const ImageUpload = () => {
     <div className="image-upload-container">
       <input
         type="file"
+        multiple
         onChange={handleFileChange}
         accept="image/*"
         style={{ display: 'none' }}
         ref={fileInputRef}
       />
-      <button className="image-upload-btn" onClick={handleButtonClick}>Upload Image</button>
+      <button className="image-upload-btn" onClick={handleButtonClick}>Upload Images</button>
+      <div className="image-preview">
+        {images.map((image, index) => (
+          <img key={index} src={image.url} alt={image.name} style={{ width: '100px', height: 'auto' }} />
+        ))}
+      </div>
       <button className="image-upload-btn" onClick={handleSubmit}>Count Colonies</button>
       {colonyCount != null && (
         <div>
           <p>Colony Count: {colonyCount}</p>
-          <img src={resultImage} alt="Result" />
+          <img src={resultImage} alt="Processed Result" />
         </div>
       )}
     </div>
