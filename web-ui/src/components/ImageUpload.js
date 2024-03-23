@@ -30,7 +30,6 @@ const ImageUpload = () => {
     // Initialize empty arrays to store results for each image
     let newResultImages = [];
     let newColonyCounts = [];
-    setSelectedIndex(0);
 
     for (let image of images) {
       const formData = new FormData();
@@ -70,7 +69,7 @@ const ImageUpload = () => {
     // Update the state with the new results after all images have been processed
     setResultImages(newResultImages);
     setColonyCounts(newColonyCounts);
-    alert("All images submitted successfully!");
+    setSelectedIndex(0);
   };
 
   const handleButtonClick = () => {
