@@ -4,54 +4,86 @@ import { BeforeAfter } from "react-simple-before-after";
 const countColoniesApi = "http://127.0.0.1:5000/count-colonies";
 const ImageUpload = () => {
   const [images, setImages] = useState([]); // Store the images for preview
-  const [selectedFile, setSelectedFile] = useState(null); // The file to be sent
-  const [resultImage, setResultImage] = useState(""); // The processed image
-  const [colonyCount, setColonyCount] = useState(null); // The colony count result
+  const [resultImages, setResultImages] = useState([]); // Store the processed images for preview
+  const [colonyCounts, setColonyCounts] = useState([]); // Store the colony counts for each image
+  const [selectedIndex, setSelectedIndex] = useState(0); // The index of the selected image
   const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
+    setImages([]);
     if (event.target.files) {
       const filesArray = Array.from(event.target.files).map((file) => ({
         url: URL.createObjectURL(file),
         name: file.name,
       }));
-      setSelectedFile(event.target.files[0]); // Assuming you're processing the first selected file
       setImages(filesArray);
+      setSelectedIndex(null);
     }
   };
 
   const handleSubmit = async () => {
-    if (!selectedFile) {
+    if (images.length === 0) {
       alert("Please select a file before submitting.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
+    // Initialize empty arrays to store results for each image
+    let newResultImages = [];
+    let newColonyCounts = [];
+    setSelectedIndex(0);
 
-    try {
-      const response = await fetch(countColoniesApi, {
-        method: "POST",
-        body: formData,
-      });
+    for (let image of images) {
+      const formData = new FormData();
+      // Retrieve image file from image URL
+      const responseToBlob = await fetch(image.url);
+      const blob = await responseToBlob.blob();
+      formData.append(
+        "file",
+        new File([blob], image.name, { type: "image/jpeg" })
+      );
 
-      if (response.ok) {
-        const data = await response.json();
-        setResultImage(`data:image/jpeg;base64,${data.result_image_base64}`);
-        setColonyCount(data.colony_count);
-        alert("Images submitted successfully!");
-      } else {
-        alert("Failed to submit images.");
+      try {
+        const response = await fetch(countColoniesApi, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          newResultImages.push(
+            `data:image/jpeg;base64,${data.result_image_base64}`
+          );
+          newColonyCounts.push(data.colony_count);
+        } else {
+          alert("Failed to submit an image.");
+          // In a real application, you might want to handle this more gracefully
+          return;
+        }
+      } catch (error) {
+        console.error("Submission error for an image:", error);
+        alert("An error occurred while submitting an image.");
+        // In a real application, you might want to handle this more gracefully
+        return;
       }
-    } catch (error) {
-      console.error("Submission error:", error);
-      alert("An error occurred while submitting the images.");
     }
+
+    // Update the state with the new results after all images have been processed
+    setResultImages(newResultImages);
+    setColonyCounts(newColonyCounts);
+    alert("All images submitted successfully!");
   };
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
+
+  const handleImageSelect = (index) => {
+    setSelectedIndex(index);
+  };
+
+  const colonyCount = colonyCounts[selectedIndex];
+  const resultImage = resultImages[selectedIndex];
+  const image = images[selectedIndex];
 
   return (
     <div className="image-upload-container">
@@ -72,7 +104,12 @@ const ImageUpload = () => {
             key={index}
             src={image.url}
             alt={image.name}
-            style={{ width: "100px", height: "auto" }}
+            style={{
+              width: "100px",
+              height: "auto",
+              border: selectedIndex === index ? "3px solid red" : "none",
+            }}
+            onClick={() => handleImageSelect(index)}
           />
         ))}
       </div>
@@ -83,7 +120,7 @@ const ImageUpload = () => {
         <div>
           <p>Colony Count: {colonyCount}</p>
           <BeforeAfter
-            beforeImage={images[0].url}
+            beforeImage={image.url}
             afterImage={resultImage}
             /* Other Props */
           />
