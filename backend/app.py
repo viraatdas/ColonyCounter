@@ -11,7 +11,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Set the path for the uploads
-UPLOAD_FOLDER = '/Users/viraatd/Documents/Personal/ColonyCounter/backend/uploads'
+UPLOAD_FOLDER = '/Users/viraatdas/Documents/GitHub/ColonyCounter/backend/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Ensure the folder exists
