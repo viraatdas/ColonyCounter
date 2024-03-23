@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
+import { BeforeAfter } from "react-simple-before-after";
 
+const countColoniesApi = "http://127.0.0.1:5000/count-colonies";
 const ImageUpload = () => {
   const [images, setImages] = useState([]); // Store the images for preview
   const [selectedFile, setSelectedFile] = useState(null); // The file to be sent
@@ -28,7 +30,7 @@ const ImageUpload = () => {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/count-colonies", {
+      const response = await fetch(countColoniesApi, {
         method: "POST",
         body: formData,
       });
@@ -80,7 +82,11 @@ const ImageUpload = () => {
       {colonyCount != null && (
         <div>
           <p>Colony Count: {colonyCount}</p>
-          <img src={resultImage} alt="Processed Result" />
+          <BeforeAfter
+            beforeImage={images[0].url}
+            afterImage={resultImage}
+            /* Other Props */
+          />
         </div>
       )}
     </div>
