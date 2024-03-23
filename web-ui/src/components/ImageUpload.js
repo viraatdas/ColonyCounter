@@ -1,31 +1,40 @@
-import React, { useState, useRef } from 'react';
+import React, { Component } from 'react';
+import BeforeAfterSlider from 'react-before-after-slider';
 
-const ImageUpload = () => {
-  const [images, setImages] = useState([]); // Store the images for preview
-  const [selectedFile, setSelectedFile] = useState(null); // The file to be sent
-  const [resultImage, setResultImage] = useState(''); // The processed image
-  const [colonyCount, setColonyCount] = useState(null); // The colony count result
-  const fileInputRef = useRef(null);
+class ImageUpload extends Component {
+  state = {
+    images: [], // Each object in this array will hold original, processed, and count
+  };
 
-  const handleFileChange = (event) => {
-    if (event.target.files) {
-      const filesArray = Array.from(event.target.files).map((file) => ({
-        url: URL.createObjectURL(file),
-        name: file.name,
-      }));
-      setSelectedFile(event.target.files[0]); // Assuming you're processing the first selected file
-      setImages(filesArray);
+  fileInputRef = React.createRef();
+
+  handleFileChange = (event) => {
+    const files = event.target.files;
+    if (files) {
+      this.processFiles(Array.from(files));
     }
   };
 
-  const handleSubmit = async () => {
-    if (!selectedFile) {
-      alert('Please select a file before submitting.');
-      return;
-    }
+  processFiles = (files) => {
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Add the original image to state for display
+        const originalUrl = reader.result;
+        this.setState(prevState => ({
+          images: [...prevState.images, { original: originalUrl, processed: '', count: 0 }],
+        }));
+        // Here you'd upload the file and update the state with the processed image and count
+        // This is just a placeholder to show structure
+        this.uploadAndProcessImage(file);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
+  uploadAndProcessImage = async (file) => {
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    formData.append('file', file);
 
     try {
       const response = await fetch('http://127.0.0.1:5000/count-colonies', {
@@ -35,47 +44,51 @@ const ImageUpload = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setResultImage(`data:image/jpeg;base64,${data.result_image_base64}`);
-        setColonyCount(data.colony_count);
-        alert('Images submitted successfully!');
+        this.setState(prevState => ({
+          images: prevState.images.map(img => img.original === URL.createObjectURL(file) ? {
+            ...img,
+            processed: `data:image/jpeg;base64,${data.result_image_base64}`,
+            count: data.colony_count
+          } : img)
+        }));
       } else {
-        alert('Failed to submit images.');
+        console.error('Failed to submit image');
       }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('An error occurred while submitting the images.');
     }
   };
 
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
+  handleButtonClick = () => {
+    this.fileInputRef.current.click();
   };
 
-  return (
-    <div className="image-upload-container">
-      <input
-        type="file"
-        multiple
-        onChange={handleFileChange}
-        accept="image/*"
-        style={{ display: 'none' }}
-        ref={fileInputRef}
-      />
-      <button className="image-upload-btn" onClick={handleButtonClick}>Upload Images</button>
-      <div className="image-preview">
-        {images.map((image, index) => (
-          <img key={index} src={image.url} alt={image.name} style={{ width: '100px', height: 'auto' }} />
+  render() {
+    return (
+      <div className="image-upload-container">
+        <input
+          type="file"
+          multiple
+          onChange={this.handleFileChange}
+          accept="image/*"
+          style={{ display: 'none' }}
+          ref={this.fileInputRef}
+        />
+        <button onClick={this.handleButtonClick}>Upload Images</button>
+        {this.state.images.map((img, index) => (
+          img.processed && <div key={index}>
+            <BeforeAfterSlider
+              before={img.original}
+              after={img.processed}
+              width={640}
+              height={480}
+            />
+            <p>Colony Count: {img.count}</p>
+          </div>
         ))}
       </div>
-      <button className="image-upload-btn" onClick={handleSubmit}>Count Colonies</button>
-      {colonyCount != null && (
-        <div>
-          <p>Colony Count: {colonyCount}</p>
-          <img src={resultImage} alt="Processed Result" />
-        </div>
-      )}
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default ImageUpload;
