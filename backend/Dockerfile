@@ -16,5 +16,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Specify the command to run on container start
-CMD ["gunicorn", "app:app", "--config", "gunicorn.config.py"]
-
+CMD ["gunicorn", "app:app"]

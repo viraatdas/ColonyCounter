@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
 import { BeforeAfter } from "react-simple-before-after";
 
-const countColoniesApi = "http://127.0.0.1:5000/count-colonies";
+const countColoniesApi =
+  "https://colony-counter-c9342bb08f9c.herokuapp.com/count-colonies";
 const ImageUpload = () => {
   const [images, setImages] = useState([]); // Store the images for preview
   const [resultImages, setResultImages] = useState([]); // Store the processed images for preview
