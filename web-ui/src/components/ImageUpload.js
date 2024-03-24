@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { BeforeAfter } from "react-simple-before-after";
 import sampleImage from "../assets/sample_1.png";
 
