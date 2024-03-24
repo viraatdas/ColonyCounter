@@ -13,6 +13,13 @@
   }
 }
 
+.description {
+  margin: 20px 0;
+  color: #ccc; /* Light gray text color, adjust as needed */
+  font-size: 1.2rem; /* Larger text size */
+}
+
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
