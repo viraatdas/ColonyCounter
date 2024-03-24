@@ -3,6 +3,7 @@
 Count colonies from petri dish images.
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/ca54de96-4808-4b92-a98d-32b860f6bbfe/deploy-status)](https://app.netlify.com/sites/colonycounter/deploys)
+![Deploy to Heroku](https://github.com/viraatdas/ColonyCounter/actions/workflows/deploy-to-heroku.yml/badge.svg)
 
 ## Sample outputs
 
@@ -37,17 +38,19 @@ To use the Colony Counter, first, make sure you have Python installed on your sy
 
 This will process the input image, count the colonies, and generate an output image displaying the detected colonies along with the colony count in a window.
 
-
 ## Image parsing logic
-*fill this more*
+
+_fill this more_
 
 Canny edge detection
 
 ## Backend
+
 - Deployed as a docker image to Heroku
-- Flask API 
+- Flask API
 
 ## Frontend
+
 - React
 - Deployed on netlify
 
