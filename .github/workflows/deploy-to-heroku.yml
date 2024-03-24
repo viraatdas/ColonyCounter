@@ -1,0 +1,29 @@
+name: Deploy to Heroku
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      
+      - name: Log in to Heroku Container Registry
+        run: heroku container:login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+      - name: Push Docker container to Heroku
+        run: heroku container:push web --app colony-counter
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
+      - name: Release the container
+        run: heroku container:release web --app colony-counter
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+
