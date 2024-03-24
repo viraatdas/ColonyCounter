@@ -1,10 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BeforeAfter } from "react-simple-before-after";
+import sampleImage from "../assets/sample_1.png";
 
 const countColoniesApi =
   "https://colony-counter-c9342bb08f9c.herokuapp.com/count-colonies";
 const ImageUpload = () => {
-  const [images, setImages] = useState([]); // Store the images for preview
+  const sample_image = {
+    url: sampleImage,
+    name: "sample_1.png",
+  };
+
+  const [images, setImages] = useState([sample_image]); // Store the images for preview
   const [resultImages, setResultImages] = useState([]); // Store the processed images for preview
   const [colonyCounts, setColonyCounts] = useState([]); // Store the colony counts for each image
   const [selectedIndex, setSelectedIndex] = useState(0); // The index of the selected image
@@ -24,8 +30,7 @@ const ImageUpload = () => {
 
   const handleSubmit = async () => {
     if (images.length === 0) {
-      alert("Please select a file before submitting.");
-      return;
+      setImages([sample_image]);
     }
 
     // Initialize empty arrays to store results for each image
@@ -119,11 +124,7 @@ const ImageUpload = () => {
       {colonyCount != null && (
         <div>
           <p>Colony Count: {colonyCount}</p>
-          <BeforeAfter
-            beforeImage={image.url}
-            afterImage={resultImage}
-            /* Other Props */
-          />
+          <BeforeAfter beforeImage={image.url} afterImage={resultImage} />
         </div>
       )}
     </div>

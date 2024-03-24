@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <p className="description">
-          Welcome to the Colony Counter application. Upload images of petri
+          Welcome to Colony Counter. Upload images of petri
           dishes to automatically count colonies.
         </p>
         <h1>Colony Counter</h1>
