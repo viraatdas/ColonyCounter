@@ -11,19 +11,22 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-      
+
       - name: Log in to Heroku Container Registry
         run: heroku container:login
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        working-directory: ./backend
 
       - name: Push Docker container to Heroku
         run: heroku container:push web --app colony-counter
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        working-directory: ./backend
 
       - name: Release the container
         run: heroku container:release web --app colony-counter
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        working-directory: ./backend
 
