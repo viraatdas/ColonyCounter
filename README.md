@@ -19,9 +19,11 @@ The following table shows the input colony images and their corresponding output
 
 To use the Colony Counter, first, make sure you have Python installed on your system. Then, follow these steps:
 
+`cd backend/`
+
 1. Install the required dependencies using pip:
    ```bash
-   pip install opencv-python numpy
+   pip install -r requirements.txt
    ```
 2. Clone the repository
    ```bash
